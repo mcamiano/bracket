@@ -5,22 +5,25 @@ angular.module('bracketApp', ['ngResource'])
     // $locationProvider.html5Mode(false); // HTML5 Mode will not work without server URL Rewriting
     $locationProvider.hashPrefix('!'); // hashbang local state fragment seems to screw things up
     $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+      .when('/home/', {
+        templateUrl: 'views/home.html',
+        controller: 'HomeCtrl'
       })
-      .when('/subordinate/', {
-        templateUrl: 'views/subordinate.html',
-        controller: 'SubordinateCtrl'
+      .when('/home/groups/', {
+        templateUrl: 'views/groups.html',
+        controller: 'GroupsCtrl'
+      })
+      .when('/foo', {
+        templateUrl: 'view/groups.html',
+        controller: 'GroupsCtrl'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/home/'
       });
-  }).factory('InstalledComponentsManifest', function() {
-    var manifest = [ 'HTML5 Boilerplate', 'AngularJS', 'Karma'
-    ];
-    manifest.other = function() {
-      return [ 'Compass', 'TwitterBootstrap' ];
+  }).factory('Groups', function() {
+    var config={ max: 101 };
+    config.fetch = function() {
+      return new Array(this.max);
     };
-    return manifest;
+    return config;
 });

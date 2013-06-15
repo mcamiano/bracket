@@ -1,0 +1,20 @@
+<div class="hero-unit">
+  <h1>route('{{route}}')</h1>
+  <p>Groups:</p>
+  <style>
+      .columnar ul { width: 30em; }
+      .columnar ul li { float: left; list-style-type: none; min-width: 2.4em; }
+      .columnar br { clear: left; }
+      div.wrapper { margin-bottom: 1em; }
+
+  </style>
+    <input ng-model="mygroup">
+  <div class='columnar'>
+    <ul>
+      <li ng-repeat="group in finiteGroups | filter:mygroup" class="btn">{{$index}}</li>
+    </ul>
+    <br/>
+  </div>
+    <p>{{Groups.sharedProperty}}</p>
+    <a href='#!/home/'>Go Home</a>
+</div>
