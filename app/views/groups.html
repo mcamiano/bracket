@@ -1,20 +1,42 @@
-<div class="hero-unit">
-  <h1>route('{{route}}')</h1>
-  <p>Groups:</p>
-  <style>
-      .columnar ul { width: 30em; }
-      .columnar ul li { float: left; list-style-type: none; min-width: 2.4em; }
-      .columnar br { clear: left; }
-      div.wrapper { margin-bottom: 1em; }
-
-  </style>
-    <input ng-model="mygroup">
-  <div class='columnar'>
-    <ul>
-      <li ng-repeat="group in finiteGroups | filter:mygroup" class="btn">{{$index}}</li>
-    </ul>
-    <br/>
-  </div>
-    <p>{{Groups.sharedProperty}}</p>
+<div class="hero-unit" data-debug-route='{{route}}' >
+  <h2>[{{title}}]<span class='skewed-back'>{{subtitle}}</span></h2>
+</div>
+<style>
+    .columnar ul { width: auto; }
+    .columnar ul li { float: left; list-style-type: none; min-width: 2.4em; }
+    .columnar br { clear: left; }
+    .skewed-back {
+      -webkit-transform: rotate(-20deg) translate(-50px,20px);
+      -moz-transform: rotate(-20deg) translate(-50px,20px);
+      -o-transform: rotate(-20deg) translate(-50px,20px);
+      transform: rotate(-20deg) translate(-50px,20px);
+      font-size: 1.3em;
+      font-family: georgia, 'times roman';
+      display: inline-block;
+    }
+    div.wrapper { margin-bottom: 1em; }
+</style>
+<div class="row-fluid">
+  <div class="span6 well">
+    <form class="horizontal-form">
+      <span class="control-group">
+        <label>Search: <input class="input-small" type='text' ng-model="mygroup" value='100'></label>
+      </span>
+    </form>
+    <div class='columnar'>
+      <ul>
+        <li ng-repeat="(val, idx) in finiteGroups" class="btn">Z<sub>{{idx}}</sub></li>
+      </ul>
+      <br/>
+    </div>
     <a href='#!/home/'>Go Home</a>
+  </div>
+  <div class="span6 well">
+    <div class='columnar'>
+      <ul>
+        <li ng-repeat="(val, idx) in finiteGroups | filterByIndex:mygroup" class="btn">Z<sub>{{idx}}</sub></li>
+      </ul>
+      <br/>
+    </div>
+  </div>
 </div>
