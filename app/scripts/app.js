@@ -42,4 +42,33 @@ angular.module('bracketApp', ['ngResource','ngSanitize'])
     }
     return out;
   };
+}).directive('commonFooter', function() {
+ return {
+   restrict: ['A','E'], // Element, Attribute, Class, coMments
+   template: '<div>{{footer}}</div>',
+   // compile: function(tElement, tAttrs) { tElement.append('Footer Appended!'); }
+   link: function(scope, element, attrs) {
+     scope.footer = 'Overridden Footer';
+   }
+ };
+}).directive('commonHeader', function() {
+ return {
+   controller: function($scope, $element, $attrs) {
+   },
+   restrict: ['C','M'], // Element, Attribute, Class, coMments
+   replace: false, // true: overwrite the original element; false: update content
+   priority: 1, // order of application of multiple directives; bigger => higher priority
+   terminal: false, // will this priority level be the last one evaluated?
+   template: '<div>{{header}}</div>',
+   scope: true, // inherits from parent; or
+   // scope: { braceboundobj: '@', directobj: '=', boundexpr: '&' }, // for isolated scope,
+   // compile: function(tElement, tAttrs) { tElement.append('Footer Appended!'); }
+   // transclude: true, // allow ng-transclude attribute 
+   // transclude: element, // allow replacement function injected into compile
+   // compile: function(tElement, tAttrs, transcludeFn) { return function (scope, el, tAttrs) { transcludeFn(scope, function cloneConnectFn(cElement) { tElement.after('<h2>I was added during compilation </h2>').after(cElement); }); }; }
+   link: function(scope, element, attrs) {
+     scope.header = 'Overridden Header';
+   }
+ };
 });
+

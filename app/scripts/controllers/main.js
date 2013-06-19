@@ -6,6 +6,8 @@ app.controller('HomeCtrl', function ($scope, Groups) {
   $scope.route = '/home';
   $scope.title = 'Bracket';
   $scope.Groups = Groups;
+  $scope.footer = 'Original footer';
+  $scope.footer = 'Original header';
 });
 
 app.controller('GroupsCtrl', function ($scope, Groups) {
