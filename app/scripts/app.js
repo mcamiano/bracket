@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bracketApp', ['ngResource','ngSanitize'])
+angular.module('bracketApp', ['ngResource','ngSanitize']) // ,'adaptive.speech'])
   .config(function ($routeProvider, $locationProvider) {
     // $locationProvider.html5Mode(false); // HTML5 Mode will not work without server URL Rewriting
     $locationProvider.hashPrefix('!'); // hashbang local state fragment seems to screw things up
@@ -20,23 +20,25 @@ angular.module('bracketApp', ['ngResource','ngSanitize'])
       .otherwise({
         redirectTo: '/home/'
       });
-  }).factory('Groups', function() {
+}).factory('Groups', function() {
     var config={ max: 101 };
     config.fetch = function() {
-      var r=new Array(this.max);
-      for (var i=0; i<r.length;++i){ r[i]=""+i; }
+      var r=new Array();
+      for (var i=1; i<this.max; ++i) { r[i-1]=i; }
       return r;
     };
     return config;
-}).filter('filterByIndex', function () {
-  return function byIdxFilter(input,modl) {
+}).filter('filterByGenerator', function () {
+  return function byGeneratorFilter(input,exemplar) {
     var out=[];
-    var re=new RegExp(modl);
+    // var re=new RegExp(exemplar);
     if (!Array.isArray(input)) { return input; }
-    if (typeof modl == 'undefined') { return input;}
-    if (modl == '') { return input;}
+    if (typeof exemplar == 'undefined') { return input;}
+    if (exemplar == '') { return input;}
+    var generator=parseInt(exemplar);
     for (var i in input) {
-      if (re.test(""+i)) {
+      if (i<generator) continue;
+      if ( gcd(i, generator) == 1 ) { // (re.test(""+i)) {
         out.push(i);
       }
     }
@@ -60,7 +62,7 @@ angular.module('bracketApp', ['ngResource','ngSanitize'])
    priority: 1, // order of application of multiple directives; bigger => higher priority
    terminal: false, // will this priority level be the last one evaluated?
    template: '<div>{{header}}</div>',
-   scope: true, // inherits from parent; or
+   scope: true, // inherits from parent; or use parents scope
    // scope: { braceboundobj: '@', directobj: '=', boundexpr: '&' }, // for isolated scope,
    // compile: function(tElement, tAttrs) { tElement.append('Footer Appended!'); }
    // transclude: true, // allow ng-transclude attribute 
@@ -70,5 +72,36 @@ angular.module('bracketApp', ['ngResource','ngSanitize'])
      scope.header = 'Overridden Header';
    }
  };
+}).directive('delimiter', function() {
+  return {
+    compile: function( element, attributes ) {
+      var content = element.html().replace(/$/,function(){
+        return attributes.delimiter;
+      });
+      element.html(content);
+    },
+    priority: 1001,
+    restrict: 'A'
+  };
+}).directive('wrapper', function() {
+  return {
+    compile: function( element, attributes ) {
+      if (!attributes.wrapper) return;
+      console.log(attributes.wrapper);
+      var startwrap=attributes.wrapper[0];
+      var endwrap=attributes.wrapper[1];
+      var content = element.html().replace(/$/,endwrap).replace(/^/,startwrap);
+      element.html(content);
+    },
+    priority: 1002,
+    restrict: 'A'
+  };
 });
+
+function gcd(a, b){
+   if(a == 0) return b;
+   if(b == 0) return a;
+   if(a > b) return gcd(b, a % b);
+   return gcd(a, b % a);
+}
 
